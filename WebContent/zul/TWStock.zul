@@ -1,0 +1,118 @@
+<window border="none" apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('zk.springboot.controller.TWStockController')">
+	<grid>
+		<auxhead>
+			<auxheader colspan="4" class="topic">今日台灣股票資訊</auxheader>
+		</auxhead>
+		<columns>
+			<column label="股票類型" align="center" />
+			<column label="產業" align="center" />
+			<column label="股票" align="center" />
+			<column label=" " align="center" />
+		</columns>
+		<rows>
+			<row>
+				<combobox model="@load(vm.stockTypes)" value="-- 請選擇 --"
+					onSelect="@command('selectStockType')" selectedItem="@bind(vm.selectedStockType)">
+					<template name="model">
+						<comboitem label="@load(each.label)" />
+					</template>
+				</combobox>
+
+				<combobox model="@load(vm.industries)" value="-- 請選擇 --"
+					onSelect="@command('selectIndustry')" selectedItem="@bind(vm.selectedIndustry)">
+					<template name="model">
+						<comboitem label="@load(each.label)" />
+					</template>
+				</combobox>
+
+				<combobox model="@load(vm.stocks)" value="-- 請選擇 --"
+					onSelect="@command('selectStock')" selectedItem="@bind(vm.selectedStock)">
+					<template name="model">
+						<comboitem label="@load(each.label)" />
+					</template>
+				</combobox>
+
+				<button label="查詢" onClick="@command('search')" />
+			</row>
+			<row>
+				<textbox value="@bind(vm.quantity)" width="100%"/>
+					
+				<button label="購買" onClick="@command('purchase')" />
+			</row>
+		</rows>
+	</grid>
+
+	<grid visible="@load(not empty vm.todayPrice)">
+		<auxhead>
+            <auxheader colspan="4">
+            	<label value="@load(vm.todayPrice.code)" />
+            	<label value="@load(vm.todayPrice.name)" />            	
+            </auxheader>
+        </auxhead>
+		<rows sclass="narrow">	
+			<row>
+				<label value="最近成交價"/>
+				<label value="@load(vm.todayPrice.lastPrice)" style="@load(vm.todayPrice.positive ? 'color:red' : 'color: green')" >
+				</label>
+				<label value="漲跌價差(百分比)" />
+				<label value="@load(vm.todayPrice.priceDifferenceText)" style="@load(vm.todayPrice.positive ? 'color:red' : 'color: green')">
+				</label>
+			</row>
+			<row>
+				<label value="當盤成交量"/>
+				<label value="@load(vm.todayPrice.lastTradeCount)"/>
+				<label value="累積成交量"/>
+				<label value="@load(vm.todayPrice.totalTradeCount)"/>
+			</row>
+			<row>
+				<label value="開盤"/>
+				<label value="@load(vm.todayPrice.openPrice)"/>
+				<label value="最高"/>
+				<label value="@load(vm.todayPrice.highPrice)"/>
+			</row>
+			<row>
+				<label value="最低"/>
+				<label value="@load(vm.todayPrice.lowPrice)"/>
+			</row>
+         </rows>
+    </grid>
+	
+	
+	<div width="50%" style="float: left;">	
+		<listbox visible="@load(not empty vm.todayPrice)" model="@load(vm.todayPrice.waitForBuys)">
+		 	<auxhead>
+				<auxheader colspan="2" class="topic">最佳五檔買進價量資訊</auxheader>
+			</auxhead>
+	        <listhead>
+	            <listheader label="買進數量" />
+	            <listheader label="買進價格" />
+	        </listhead>
+	        <template name="model">
+	        	<listitem>
+	            	<listcell><label value="${each.count}"></label></listcell>
+	           		<listcell><label value="${each.price}"></label></listcell>
+	       		 </listitem>
+	        </template>
+    	</listbox>
+	</div>
+		 
+	<div width="50%" style="float: right;">	
+       <listbox  visible="@load(not empty vm.todayPrice)" model="@load(vm.todayPrice.waitForSells)">
+		 	<auxhead>
+				<auxheader colspan="2" class="topic">最佳五檔賣出價量資訊</auxheader>
+			</auxhead>
+	        <listhead>
+	            <listheader label="賣出數量" />
+	            <listheader label="賣出價格" />
+	        </listhead>
+	        <template name="model">
+	        	<listitem>
+	            	<listcell><label value="${each.count}"></label></listcell>
+	           		<listcell><label value="${each.price}"></label></listcell>
+	       		 </listitem>
+	        </template>
+   		</listbox> 
+   	</div>
+		  
+</window>

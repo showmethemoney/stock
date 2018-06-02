@@ -1,0 +1,29 @@
+<window border="none" apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('zk.springboot.controller.TWStockPurchaseController')">
+		
+	<vlayout>		
+		<div width="80%" align="center" style="margin:0 auto;">	
+			<listbox model="@load(vm.purchaseList)" rows="10">
+			 	<auxhead>
+					<auxheader colspan="5" class="topic">股票購買紀錄</auxheader>
+				</auxhead>
+		        <listhead>
+		            <listheader label="交易日期" />
+		            <listheader label="股票代號" />
+		            <listheader label="股票名稱" />
+		            <listheader label="數量" />
+		            <listheader label="成交價" />
+		        </listhead>
+		        <template name="model">
+		        	<listitem>
+		            	<listcell><label value="${each.transactionDate}"></label></listcell>
+		           		<listcell><label value="${each.code}"></label></listcell>
+		           		<listcell><label value="${each.name}"></label></listcell>
+		            	<listcell><label value="${each.quantity}"></label></listcell>
+		           		<listcell><label value="${each.price}"></label></listcell>
+		       		 </listitem>
+		        </template>
+	    	</listbox>
+		</div>
+	</vlayout>
+</window>
